@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor's Journey — 12-Week Internship</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f9f9f7;color:#1a1a18;padding:1.5rem}
+.phase-nav{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.pnav{font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;cursor:pointer;border:1px solid #d3d1c7;background:#fff;color:#73726c;transition:all .15s}
+.pnav.active{color:#1a1a18;border-color:#888780;background:#f1efe8}
+.pnav:hover{background:#f1efe8}
+.phase-panel{display:none}
+.phase-panel.active{display:block}
+.phase-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;padding:14px 16px;border-radius:12px;border:1px solid #e2e0d6;background:#fff}
+.phase-week{font-size:11px;font-weight:500;padding:3px 10px;border-radius:10px;white-space:nowrap;margin-top:2px}
+.phase-title{font-size:16px;font-weight:600;color:#1a1a18;margin-bottom:4px}
+.phase-goal{font-size:13px;color:#73726c;line-height:1.5}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}
+@media(max-width:640px){.grid3,.grid2{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e2e0d6;border-radius:12px;padding:12px 14px}
+.card-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.card-label.teal{color:#0f6e56}.card-label.purple{color:#534ab7}.card-label.amber{color:#854f0b}.card-label.gray{color:#5f5e5a}.card-label.blue{color:#185fa5}
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#73726c;padding:5px 0;border-bottom:1px solid #f1efe8;line-height:1.5;cursor:pointer;transition:color .1s}
+.checklist li:last-child{border-bottom:none}
+.checklist li.checked{color:#b4b2a9;text-decoration:line-through}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #d3d1c7;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.cb.done{background:#e1f5ee;border-color:#1d9e75}
+.cb svg{display:none;width:9px;height:9px}
+.cb.done svg{display:block}
+.event-list{display:flex;flex-direction:column;gap:8px}
+.event-item{display:flex;align-items:flex-start;gap:8px}
+.event-cal{background:#fff;border:1px solid #d3d1c7;border-radius:6px;width:38px;flex-shrink:0;overflow:hidden}
+.event-cal-top{height:7px}
+.event-cal-body{padding:3px 4px;text-align:center}
+.event-cal-day{font-size:11px;font-weight:600;color:#1a1a18}
+.event-cal-lbl{font-size:9px;color:#73726c}
+.event-name{font-size:12px;font-weight:600;color:#1a1a18}
+.event-meta{font-size:11px;color:#73726c;margin-top:1px}
+.badge{display:inline-block;font-size:10px;padding:1px 7px;border-radius:8px;margin-left:4px;vertical-align:middle}
+.badge.teal{background:#e1f5ee;color:#085041}
+.badge.purple{background:#eeedfe;color:#3c3489}
+.badge.amber{background:#faeeda;color:#633806}
+.badge.red{background:#fcebeb;color:#791f1f}
+.slack-mock{background:#f4f3ee;border-radius:8px;padding:10px 12px}
+.slack-row{display:grid;grid-template-columns:28px 1fr;gap:8px;margin-bottom:10px}
+.slack-row:last-child{margin-bottom:0}
+.av{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
+.av.teal{background:#e1f5ee;color:#085041}
+.av.purple{background:#eeedfe;color:#3c3489}
+.slack-name{font-size:12px;font-weight:600;color:#1a1a18}
+.slack-time{font-size:11px;color:#73726c;margin-left:6px;font-weight:400}
+.slack-ch{font-size:10px;color:#73726c;margin-bottom:2px}
+.slack-text{font-size:12px;color:#1a1a18;line-height:1.6}
+.slack-text .dim{color:#73726c}
+.blocker{background:#fdedec;border-left:2.5px solid #e24b4a;padding:4px 8px;border-radius:0 4px 4px 0;font-size:12px;color:#a32d2d;margin-top:4px;line-height:1.5}
+.wrap-agenda{background:#f4f3ee;border-radius:8px;padding:10px 12px}
+.wrap-row{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid #e2e0d6;font-size:12px}
+.wrap-row:last-child{border-bottom:none}
+.wrap-time{font-size:11px;font-weight:600;color:#73726c;min-width:42px}
+.wrap-text{color:#1a1a18}
+</style>
+</head>
+<body>
+
+<div class="phase-nav">
+  <div class="pnav active" onclick="show(0)">Before Day 1</div>
+  <div class="pnav" onclick="show(1)">Weeks 1–2</div>
+  <div class="pnav" onclick="show(2)">Weeks 3–5</div>
+  <div class="pnav" onclick="show(3)">Week 6 — mid-point</div>
+  <div class="pnav" onclick="show(4)">Weeks 7–11</div>
+  <div class="pnav" onclick="show(5)">Week 12 — final</div>
+</div>
+
+<!-- PHASE 0 -->
+<div id="p0" class="phase-panel active">
+  <div class="phase-header">
+    <div style="flex:1">
+      <div class="phase-title">Before Day 1 — set the intern up to succeed</div>
+      <div class="phase-goal">Your goal: the intern can start working within the first hour of Day 1. If they arrive to an empty calendar and no access, you've already made a bad first impression.</div>
+    </div>
+    <div class="phase-week" style="background:#e1f5ee;color:#085041">Before start</div>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-label teal">Goals</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Draft 3 goals using Barley prompts 2A + 2B</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Post goals in internship Slack channel</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Confirm goals with L&D/PBP before Day 1</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label teal">Access & setup</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>GitHub/GitLab repository access — tested</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Jira project board access</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Slack — internship + project channels</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>AWS / cloud accounts + API keys</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Confluence / Coda — project docs access</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>NDA signed (coordinate with L&D/PBP)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label teal">Week 1 prep</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Use Barley prompt 2C to find week 1 tasks</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Create Jira tickets for week 1</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Prepare Day 1 agenda — no empty morning</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Block your calendar — be available Day 1</li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label gray">Calendar events — Day 1</div>
+      <div class="event-list">
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">D1</div><div class="event-cal-lbl">Mon</div></div></div>
+          <div><div class="event-name">Mentor kick-off with intern <span class="badge teal">Day 1</span></div><div class="event-meta">1 hour · project intro, goals walkthrough, week 1 tasks, team norms</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#7f77dd"></div><div class="event-cal-body"><div class="event-cal-day">D1</div><div class="event-cal-lbl">Mon</div></div></div>
+          <div><div class="event-name">L&D/PBP intro session <span class="badge purple">L&D runs</span></div><div class="event-meta">30 min · program walkthrough · intern receives one-pager</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#888780"></div><div class="event-cal-body"><div class="event-cal-day">D1</div><div class="event-cal-lbl">Mon</div></div></div>
+          <div><div class="event-name">Team standup introduction</div><div class="event-meta">Brief slot · intern meets the team, not optional</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label gray">Goals — what to post in Slack before Day 1</div>
+      <div class="slack-mock">
+        <div class="slack-row">
+          <div class="av teal">ME</div>
+          <div>
+            <div class="slack-ch">#internship-provectus</div>
+            <div class="slack-name">Mentor <span class="slack-time">Before Day 1</span></div>
+            <div class="slack-text">
+              <span class="dim">Goals for [Intern name] — [Project name]</span><br>
+              Goal 1 (primary depth): By week 12, able to independently implement and deploy a new document ingestion module to the RAG pipeline, with code review only.<br>
+              Goal 2 (breadth): Able to navigate and contribute to at least 2 other system components beyond their primary area.<br>
+              Goal 3 (the curve): Able to own a feature end-to-end connecting the ingestion pipeline to the LLM retrieval layer.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 1 -->
+<div id="p1" class="phase-panel">
+  <div class="phase-header">
+    <div style="flex:1">
+      <div class="phase-title">Weeks 1–2 — onboarding and first real work</div>
+      <div class="phase-goal">Your goal: the intern is in the codebase, in the sprint, and posting daily updates by end of week 1. They should feel like a team member, not a visitor.</div>
+    </div>
+    <div class="phase-week" style="background:#e6f1fb;color:#0c447c">Weeks 1–2</div>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-label blue">Monday kick-off</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Share week focus + what "done" looks like by Friday</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Invite Barley to the call</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Assign first Jira ticket before noon Day 1</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Run architecture walkthrough (30–45 min)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label blue">Daily monitoring</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Check intern's daily Slack updates</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Intervene same day if ticket stalled 2+ days</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Integrate intern into standup and sprint</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Tell intern to use Barley for project questions</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label blue">Friday Wrap-Up</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Invite Barley to the call</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Run structured 1-hour conversation</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Give 1 specific developmental piece of feedback</li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label gray">Calendar events — weeks 1–2</div>
+      <div class="event-list">
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">Mon</div><div class="event-cal-lbl">wk1</div></div></div>
+          <div><div class="event-name">Monday kick-off <span class="badge teal">weekly</span></div><div class="event-meta">15–30 min · Mentor + intern · Barley on call · Jira tickets suggested</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">Fri</div><div class="event-cal-lbl">wk1</div></div></div>
+          <div><div class="event-name">Friday Wrap-Up <span class="badge teal">weekly</span></div><div class="event-meta">1 hour · Mentor + intern · Barley on call · All 12 weeks</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#7f77dd"></div><div class="event-cal-body"><div class="event-cal-day">Wed</div><div class="event-cal-lbl">wk2</div></div></div>
+          <div><div class="event-name">HR Sync #1 <span class="badge purple">L&D only</span></div><div class="event-meta">30 min · Intern + L&D/PBP · Mentor NOT present</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label gray">Intern daily Slack updates — what good looks like</div>
+      <div class="slack-mock">
+        <div class="slack-row">
+          <div class="av purple">AN</div>
+          <div>
+            <div class="slack-name">Aisha N. <span class="slack-time">9:04 AM</span></div>
+            <div class="slack-text"><span class="dim">Focus today:</span> Fixing chunking logic for large PDFs. Ticket: PROJ-142<br><span class="dim">Might need:</span> access to test PDF dataset in S3 — will ping @konstantin if I can't find it by 11.</div>
+          </div>
+        </div>
+        <div class="slack-row">
+          <div class="av purple">AN</div>
+          <div>
+            <div class="slack-name">Aisha N. <span class="slack-time">6:11 PM</span></div>
+            <div class="slack-text"><span class="dim">Done:</span> Fixed chunking for large PDFs, tested on 5 files — passing. PR #87 open.<br><span class="dim">In progress:</span> Scanned PDFs — investigating tomorrow.<div class="blocker">Blocker: OCR library not in Docker image. Raising in standup.</div><span class="dim">Learned:</span> PyMuPDF handles mixed-content PDFs better than pdfplumber.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 2 -->
+<div id="p2" class="phase-panel">
+  <div class="phase-header">
+    <div style="flex:1">
+      <div class="phase-title">Weeks 3–5 — building depth</div>
+      <div class="phase-goal">Your goal: intern is moving from breadth toward primary depth. They should be completing tickets with less hand-holding each week. Watch for stalling — intervene before week 6.</div>
+    </div>
+    <div class="phase-week" style="background:#f1efe8;color:#444441">Weeks 3–5</div>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-label amber">Weekly rhythm</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Monday kick-off every week — Barley invited</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Friday Wrap-Up every week — Barley on call</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Check Monday Barley goal alerts in Slack</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>1 specific developmental feedback every Friday</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label amber">Watch for</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Tickets stalled 2+ days with no Slack update</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>No goal progress visible for 2+ weeks</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Daily updates missing — check in same day</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Flag concerns to L&D/PBP before week 6</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label amber">Pre-assessment prep (week 5)</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Run Barley Prompt A — technical picture</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Upload mentor prompt file to Claude</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Complete structured Claude interview</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Share conversation to Barley Slack thread</li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label gray">Calendar events — weeks 3–5</div>
+      <div class="event-list">
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">Mon</div><div class="event-cal-lbl">×3</div></div></div>
+          <div><div class="event-name">Monday kick-offs</div><div class="event-meta">Weeks 3, 4, 5 · Barley on each</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">Fri</div><div class="event-cal-lbl">×3</div></div></div>
+          <div><div class="event-name">Friday Wrap-Ups</div><div class="event-meta">Weeks 3, 4, 5 · Barley on each</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#7f77dd"></div><div class="event-cal-body"><div class="event-cal-day">Wed</div><div class="event-cal-lbl">×2</div></div></div>
+          <div><div class="event-name">HR Syncs #2 and #3 <span class="badge purple">L&D only</span></div><div class="event-meta">Weeks 3 and 5 · Mentor NOT present</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#e24b4a"></div><div class="event-cal-body"><div class="event-cal-day">Mon</div><div class="event-cal-lbl">wk5</div></div></div>
+          <div><div class="event-name">Mid-point reminder <span class="badge red">action needed</span></div><div class="event-meta">Calendar alert · Complete assessment before week 6 meeting</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label gray">Friday Wrap-Up structure — 1 hour</div>
+      <div class="wrap-agenda">
+        <div class="wrap-row"><div class="wrap-time">10 min</div><div class="wrap-text">What did you complete this week?</div></div>
+        <div class="wrap-row"><div class="wrap-time">10 min</div><div class="wrap-text">Where were you stuck and how did you handle it?</div></div>
+        <div class="wrap-row"><div class="wrap-time">15 min</div><div class="wrap-text">One specific developmental piece of feedback</div></div>
+        <div class="wrap-row"><div class="wrap-time">10 min</div><div class="wrap-text">What's the focus for next week?</div></div>
+        <div class="wrap-row"><div class="wrap-time">5 min</div><div class="wrap-text">Intern week rating (1–5) + one sentence on how they felt</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3 -->
+<div id="p3" class="phase-panel">
+  <div class="phase-header">
+    <div style="flex:1">
+      <div class="phase-title">Week 6 — mid-point assessment</div>
+      <div class="phase-goal">Your goal: confirm direction, identify gaps early, produce an action plan for anything flagged. The delta between now and week 12 is what the final decision is based on.</div>
+    </div>
+    <div class="phase-week" style="background:#eeedfe;color:#3c3489">Week 6</div>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-label purple">Assessment checklist</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Run Barley Prompt A — technical picture</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Run Barley Prompt B — goal progress</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Upload mentor prompt file to Claude</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Complete Claude interview — all 5 questions</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Share to Barley Slack thread (48h before meeting)</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Attend assessment meeting — Mentor + L&D/PBP + intern</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Review goals — on track / needs attention / off track</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Agree action plan for anything flagged</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label purple">What you're evaluating</div>
+      <div style="font-size:12px;color:#73726c;line-height:1.7">
+        <div style="padding:4px 0;border-bottom:1px solid #f1efe8"><strong style="color:#1a1a18">Technical output</strong> — tickets shipped, complexity, PR quality</div>
+        <div style="padding:4px 0;border-bottom:1px solid #f1efe8"><strong style="color:#1a1a18">Independence</strong> — how much help did they need?</div>
+        <div style="padding:4px 0;border-bottom:1px solid #f1efe8"><strong style="color:#1a1a18">AI tool usage</strong> — active and reflective, or copy-paste?</div>
+        <div style="padding:4px 0;border-bottom:1px solid #f1efe8"><strong style="color:#1a1a18">Problem-solving</strong> — explores solutions or relies on guidance?</div>
+        <div style="padding:4px 0"><strong style="color:#1a1a18">Gaps</strong> — where do you still see the ceiling?</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label purple">Calendar events — week 6</div>
+      <div class="event-list">
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#7f77dd"></div><div class="event-cal-body"><div class="event-cal-day">TBD</div><div class="event-cal-lbl">wk6</div></div></div>
+          <div><div class="event-name">Assessment meeting <span class="badge purple">all three</span></div><div class="event-meta">Mentor + L&D/PBP + intern · Schedule with L&D/PBP</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">Mon</div><div class="event-cal-lbl">wk6</div></div></div>
+          <div><div class="event-name">Monday kick-off + Friday Wrap-Up</div><div class="event-meta">Weekly rhythm continues</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#7f77dd"></div><div class="event-cal-body"><div class="event-cal-day">Wed</div><div class="event-cal-lbl">wk6</div></div></div>
+          <div><div class="event-name">HR Sync #4 <span class="badge purple">L&D only</span></div><div class="event-meta">30 min · Mentor NOT present</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 4 -->
+<div id="p4" class="phase-panel">
+  <div class="phase-header">
+    <div style="flex:1">
+      <div class="phase-title">Weeks 7–11 — building the curve</div>
+      <div class="phase-goal">Your goal: the intern moves into cross-domain ownership of a real feature. Execute the mid-point action plan. No surprises at week 12.</div>
+    </div>
+    <div class="phase-week" style="background:#f1efe8;color:#444441">Weeks 7–11</div>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-label amber">Weekly rhythm</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Monday kick-offs — Barley invited</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Friday Wrap-Ups — Barley on call</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Check Monday goal alerts in Slack</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Execute mid-point action plan with Barley support</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label amber">Focus this phase</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Assign a feature requiring cross-domain work</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Push for end-to-end ownership — design to deploy</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Reduce hand-holding — fewer prompts, more space</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Flag to L&D/PBP if action plan isn't working</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label amber">Pre-final prep (week 11)</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Run Barley Prompts A + C</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Upload mentor prompt file to Claude</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Complete Claude interview</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Share to Barley Slack thread (48h before meeting)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label gray">Calendar events — weeks 7–11</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="event-list">
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">Mon</div><div class="event-cal-lbl">×5</div></div></div>
+          <div><div class="event-name">Monday kick-offs</div><div class="event-meta">Weeks 7–11 · Barley on each</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">Fri</div><div class="event-cal-lbl">×5</div></div></div>
+          <div><div class="event-name">Friday Wrap-Ups</div><div class="event-meta">Weeks 7–11 · Barley on each</div></div>
+        </div>
+      </div>
+      <div class="event-list">
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#7f77dd"></div><div class="event-cal-body"><div class="event-cal-day">Wed</div><div class="event-cal-lbl">×2</div></div></div>
+          <div><div class="event-name">HR Syncs #5 and #6 <span class="badge purple">L&D only</span></div><div class="event-meta">Weeks 7 and 9 · Mentor NOT present</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#e24b4a"></div><div class="event-cal-body"><div class="event-cal-day">Mon</div><div class="event-cal-lbl">wk11</div></div></div>
+          <div><div class="event-name">Final reminder <span class="badge red">action needed</span></div><div class="event-meta">Calendar alert · Complete final assessment before week 12</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 5 -->
+<div id="p5" class="phase-panel">
+  <div class="phase-header">
+    <div style="flex:1">
+      <div class="phase-title">Week 12 — final assessment and resolution</div>
+      <div class="phase-goal">Your goal: a clear, evidence-based recommendation. Offer, extension, or no offer — communicated in person on the same day. No vague outcomes, no delays.</div>
+    </div>
+    <div class="phase-week" style="background:#faeeda;color:#633806">Week 12</div>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-label amber">Final assessment</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Run Barley Prompts A, B, C</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Upload mentor prompt file to Claude</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Complete Claude interview — compare to mid-point</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Share to Barley Slack thread (48h before meeting)</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Attend final meeting — Mentor + L&D/PBP + intern</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Review goals completion + 12-week trajectory</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label amber">Resolution — same day</div>
+      <ul class="checklist">
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Agree recommendation with L&D/PBP in advance</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Communicate in person — offer / extension / no offer</li>
+        <li onclick="tick(this)"><span class="cb"><svg viewBox="0 0 9 9" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4.5 3.5,7 8,1.5"/></svg></span>Not by email. Not vaguely. That day.</li>
+      </ul>
+      <div style="margin-top:10px;background:#f4f3ee;border-radius:8px;padding:8px 10px;font-size:12px;color:#73726c;line-height:1.6">The growth delta — how much the intern improved from week 6 to week 12 — carries as much weight as where they ended up.</div>
+    </div>
+    <div class="card">
+      <div class="card-label amber">Calendar events — week 12</div>
+      <div class="event-list">
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#ef9f27"></div><div class="event-cal-body"><div class="event-cal-day">TBD</div><div class="event-cal-lbl">wk12</div></div></div>
+          <div><div class="event-name">Final assessment meeting <span class="badge amber">all three</span></div><div class="event-meta">Mentor + L&D/PBP + intern · Same day resolution</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-cal"><div class="event-cal-top" style="background:#1d9e75"></div><div class="event-cal-body"><div class="event-cal-day">Mon</div><div class="event-cal-lbl">wk12</div></div></div>
+          <div><div class="event-name">Last Monday kick-off + Friday Wrap-Up</div><div class="event-meta">Weekly rhythm runs through the final week</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(i){
+  document.querySelectorAll('.phase-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+  document.querySelectorAll('.pnav').forEach((n,j)=>n.classList.toggle('active',j===i));
+}
+function tick(li){
+  li.classList.toggle('checked');
+  const cb=li.querySelector('.cb');
+  cb.classList.toggle('done');
+}
+</script>
+</body>
+</html>
